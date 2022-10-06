@@ -29,13 +29,14 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> UpdateBasket([FromBody] ShoppingCart basket)
     {
-        basket.Items.ToList().ForEach(async i =>
+
+        foreach (var item in basket.Items)
         {
             var coupoun = await _discountGrpcService
-                .GetDiscount(i.ProductName);
+                .GetDiscount(item.ProductName);
 
-            i.Price -= coupoun.Amount;
-        });
+            item.Price -= coupoun.Amount;
+        };
 
         return Ok(await _repository.UpdateBasket(basket));
     }
