@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "AspnetRunBasics": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:54400;http://localhost:54401"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:54400",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:54400;http://localhost:54401"
+      },
+      "distributionName": ""
+    }
+  }
+}
