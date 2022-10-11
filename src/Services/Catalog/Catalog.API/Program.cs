@@ -1,27 +1,35 @@
 using Catalog.API.IOC;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var configuration = builder.Configuration;
+var host = builder.Host;
 
-// Add services to the container.
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.DatabaseCollection();
+services.RepositoriesCollection();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.DatabaseCollection();
-builder.Services.RepositoriesCollection();
+builder.Services.AddAuthentication("Bearer")
+ .AddJwtBearer("Bearer", options =>
+ {
+     options.Authority = "http://localhost:9090";
+     options.RequireHttpsMetadata = false;
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateAudience = false
+     };
+ });
 
-
+services.AddSwaggerGen();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseAuthorization();
+app
+    .UseSwagger()
+    .UseSwaggerUI()
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.MapControllers();
 

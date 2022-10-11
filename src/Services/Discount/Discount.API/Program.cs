@@ -1,5 +1,6 @@
 using Discount.API.Extensions;
 using Discount.API.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 var host = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication("Bearer")
+ .AddJwtBearer("Bearer", options =>
+ {
+     options.Authority = "http://localhost:9090";
+     options.RequireHttpsMetadata = false;
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateAudience = false
+     };
+ });
 
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
@@ -24,6 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

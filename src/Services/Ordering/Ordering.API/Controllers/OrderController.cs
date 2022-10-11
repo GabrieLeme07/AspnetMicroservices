@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 using Ordering.Application.Features.Orders.Commands.DeleteOrder;
@@ -17,11 +18,13 @@ public class OrderController : ControllerBase
         => _mediator = mediator;
 
     [HttpGet("{userName}", Name = "GetOrder")]
+    [Authorize]
     [ProducesResponseType(typeof(IEnumerable<OrderVm>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetOrdersByUserName(string userName)
         => Ok(await _mediator.Send(new GetOrderListQuery(userName)));
 
     [HttpPost(Name = "CheckoutOrder")]
+    [Authorize]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<ActionResult<int>> CheckoutOrder([FromBody] CheckoutOrderCommand command)
         => Ok(await _mediator.Send(command));
@@ -30,6 +33,7 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
+    [Authorize]
     public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderCommand command)
     {
         await _mediator.Send(command);
@@ -40,6 +44,7 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
+    [Authorize]
     public async Task<ActionResult> DeleteOrder(int id)
     {
         var command = new DeleteOrderCommand() { Id = id };

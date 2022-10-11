@@ -20,7 +20,7 @@ services:
     image: dpage/pgadmin4
 
   portainer:
-    image: portainer/portainer-ce
+    image: portainer/portainer-ce    
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -64,11 +64,18 @@ services:
       context: .
       dockerfile: ApiGateways/Shopping.Aggregator/Dockerfile
 
+  aspnetrunbasics:
+    image: ${DOCKER_REGISTRY-}aspnetrunbasics
+    build:
+      context: .
+      dockerfile: WebApps/AspnetRunBasics/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
   postgres_data:
   pgadmin_data:
+
 
 
 

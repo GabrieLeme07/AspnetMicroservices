@@ -4,6 +4,7 @@ using Basket.API.GrpcServices;
 using Basket.API.Repositories;
 using EventBus.Messages.Events;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -35,10 +36,10 @@ public class BasketController : ControllerBase
         => Ok((await _repository.GetBasket(userName)) ?? new ShoppingCart(userName));
 
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> UpdateBasket([FromBody] ShoppingCart basket)
     {
-
         foreach (var item in basket.Items)
         {
             var coupoun = await _discountGrpcService
@@ -51,6 +52,7 @@ public class BasketController : ControllerBase
     }
 
     [HttpDelete("{userName}", Name = "DeleteBasket")]
+    [Authorize]
     [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> DeleteBasket(string userName)
     {
@@ -59,6 +61,7 @@ public class BasketController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [Route("[action]")]
     [ProducesResponseType((int)HttpStatusCode.Accepted)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]

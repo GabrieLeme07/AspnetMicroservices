@@ -1,5 +1,6 @@
 using EventBus.Messages.Common;
 using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using Ordering.API.EventBusConsumer;
 using Ordering.API.Extensions;
 using Ordering.Application;
@@ -35,6 +36,17 @@ builder.Services.AddMassTransit(config =>
     });
 });
 
+builder.Services.AddAuthentication("Bearer")
+ .AddJwtBearer("Bearer", options =>
+ {
+     options.Authority = "http://localhost:9090";
+     options.RequireHttpsMetadata = false;
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateAudience = false
+     };
+ });
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<BasketCheckoutConsumer>();
 
@@ -55,6 +67,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

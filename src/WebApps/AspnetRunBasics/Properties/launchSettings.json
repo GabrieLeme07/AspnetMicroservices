@@ -6,7 +6,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:54400;http://localhost:54401"
+      "applicationUrl": "http://localhost:5006"
     },
     "WSL": {
       "commandName": "WSL2",
@@ -17,6 +17,12 @@
         "ASPNETCORE_URLS": "https://localhost:54400;http://localhost:54401"
       },
       "distributionName": ""
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true
     }
   }
 }
